@@ -101,7 +101,7 @@ namespace Bank___Week_5_class
             dao.CloseCon();
         }
 
-        //not being used in the moment
+        //not being used in the moment 
         void GetData(string accNum)
         {
 
