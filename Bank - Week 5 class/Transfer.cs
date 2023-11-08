@@ -102,9 +102,8 @@ namespace Bank___Week_5_class
         }
 
         //not being used in the moment 
-        void GetData(string accNum)
+        void GetData(string accNum, Label label, TextBox textBox)
         {
-
             SqlCommand cmd = dao.OpenCon().CreateCommand();
             cmd.CommandText = "uspGetBalance";
             cmd.CommandType = CommandType.StoredProcedure;
@@ -119,10 +118,8 @@ namespace Bank___Week_5_class
                 string cy = dr["County"].ToString();
                 string bal = dr["Balance"].ToString();
 
-                lblDisplayTo.Text = fn + " " + sn + " from " + cy;
-                lblDisplayFrom.Text = fn + " " + sn + " from " + cy;
-                txtBalanceTo.Text = bal;
-                txtBalFrom.Text = bal;
+                label.Text = fn + " " + sn + " from " + cy;
+                textBox.Text = bal;
             }
             dao.CloseCon();
         }
