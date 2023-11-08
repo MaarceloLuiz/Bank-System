@@ -33,8 +33,7 @@ namespace Bank___Week_5_class
 
         private void btnTransfer_Click_1(object sender, EventArgs e)
         {
-            FundsFrom();
-            FundsTo();
+            MoneyTransfer();
         }
 
         void PopCombo()
@@ -57,51 +56,16 @@ namespace Bank___Week_5_class
         {
             string accNum = cboFromAcc.SelectedItem.ToString();
 
-            SqlCommand cmd = dao.OpenCon().CreateCommand();
-            cmd.CommandText = "uspGetBalance";
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            cmd.Parameters.AddWithValue("@acNo", accNum);
-
-            dr = cmd.ExecuteReader();
-            while (dr.Read())
-            {
-                string fn = dr["FirstName"].ToString();
-                string sn = dr["Surname"].ToString();
-                string cy = dr["County"].ToString();
-                string bal = dr["Balance"].ToString();
-
-                lblDisplayFrom.Text = fn + " " + sn + " from " + cy;
-                txtBalFrom.Text = bal;
-            }
-            dao.CloseCon();
+            GetData(accNum, lblDisplayFrom, txtBalFrom);
         }
 
         private void cboToAcc_SelectedIndexChanged(object sender, EventArgs e)
         {
             string accNum = cboToAcc.SelectedItem.ToString();
 
-            SqlCommand cmd = dao.OpenCon().CreateCommand();
-            cmd.CommandText = "uspGetBalance";
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            cmd.Parameters.AddWithValue("@acNo", accNum);
-
-            dr = cmd.ExecuteReader();
-            while (dr.Read())
-            {
-                string fn = dr["FirstName"].ToString();
-                string sn = dr["Surname"].ToString();
-                string cy = dr["County"].ToString();
-                string bal = dr["Balance"].ToString();
-
-                lblDisplayTo.Text = fn + " " + sn + " from " + cy;
-                txtBalanceTo.Text = bal;
-            }
-            dao.CloseCon();
+            GetData(accNum, lblDisplayTo, txtBalanceTo);
         }
 
-        //not being used in the moment 
         void GetData(string accNum, Label label, TextBox textBox)
         {
             SqlCommand cmd = dao.OpenCon().CreateCommand();
@@ -123,69 +87,10 @@ namespace Bank___Week_5_class
             }
             dao.CloseCon();
         }
-
-        void FundsFrom()
+        void MoneyTransfer()
         {
-            string accNum = cboFromAcc.SelectedItem.ToString();
-            decimal bal = decimal.Parse(txtBalFrom.Text);
-            decimal amt = decimal.Parse(txtAmtFrom.Text);
-            //if the transaction fails, it will be set back to the initial balance
-            decimal nb = bal;
-
-            if (amt <= bal)
-            {
-                nb = bal - amt;
-                MessageBox.Show("Transaction Completed\n you withdrew: " + amt + " euro" + "\nYour balance is now: " + nb, "Withdraw", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-                MessageBox.Show("Insufficient Funds\n Max withdraw: " + bal, "Withdraw", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-
-
-            SqlCommand cmd = dao.OpenCon().CreateCommand();
-            cmd.CommandText = "uspUpdateBalance";
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            cmd.Parameters.AddWithValue("@acNo", accNum);
-            cmd.Parameters.AddWithValue("@nb", nb);
-
-            cmd.ExecuteNonQuery();
-            dao.CloseCon();
-
-            txtBalFrom.Clear();
-        }
-
-        void FundsTo()
-        {
-            string accNum = cboToAcc.SelectedItem.ToString();
-            decimal bal = decimal.Parse(txtBalanceTo.Text);
-            decimal amt = decimal.Parse(txtAmtFrom.Text);
-
-            decimal nb = bal + amt;
-
-            SqlCommand cmd = dao.OpenCon().CreateCommand();
-            cmd.CommandText = "uspUpdateBalance";
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            cmd.Parameters.AddWithValue("@acNo", accNum);
-            cmd.Parameters.AddWithValue("@nb", nb);
-
-            cmd.ExecuteNonQuery();
-
-            dao.CloseCon();
-
-            MessageBox.Show("Transaction Completed\n you deposited: " + amt + " euro" + "\nYour balance is now: " + nb, "Deposit", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            txtAmtFrom.Clear();
-            txtBalanceTo.Clear();
-            txtBalFrom.Clear();
-        }
-
-        //not being used yet
-        void MoneyTransfer(string accFrom, string accTo)
-        {
-            //accFrom = cboFromAcc.SelectedItem.ToString();
-            //accTo = cboToAcc.SelectedItem.ToString();
+            string accFrom = cboFromAcc.SelectedItem.ToString();
+            string accTo = cboToAcc.SelectedItem.ToString();
 
             decimal balFrom = decimal.Parse(txtBalFrom.Text);
             decimal balTo = decimal.Parse(txtBalanceTo.Text);
@@ -200,7 +105,8 @@ namespace Bank___Week_5_class
             {
                 nbFrom = balFrom - amt;
                 nbTo = balTo + amt;
-                MessageBox.Show("Transaction Completed\n you tranfered: " + amt + " euro" + "\nYour balance is now: " + nbTo, "Transfer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Transaction Completed\n you tranfered: " + amt + " euro" + "\nYour balance is now: " + nbFrom, "Transfer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Transaction Completed\n the recepient received: " + amt + " euro" + "\nTheir balance is now: " + nbTo, "Transfer", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
                 MessageBox.Show("Insufficient Funds\n Max withdraw: " + balFrom, "Withdraw", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -208,14 +114,14 @@ namespace Bank___Week_5_class
 
 
             SqlCommand cmd = dao.OpenCon().CreateCommand();
-            cmd.CommandText = "uspUpdateBalance";
+            cmd.CommandText = "uspTransfer";
             cmd.CommandType = CommandType.StoredProcedure;
 
-            cmd.Parameters.AddWithValue("@acNo", accFrom);
-            cmd.Parameters.AddWithValue("@nb", nbFrom);
+            cmd.Parameters.AddWithValue("@acNoFrom", accFrom);
+            cmd.Parameters.AddWithValue("@nbFrom", nbFrom);
 
-            cmd.Parameters.AddWithValue("@acNo", accTo);
-            cmd.Parameters.AddWithValue("@nb", nbTo);
+            cmd.Parameters.AddWithValue("@acNoTo", accTo);
+            cmd.Parameters.AddWithValue("@nbTo", nbTo);
 
             cmd.ExecuteNonQuery();
             dao.CloseCon();
