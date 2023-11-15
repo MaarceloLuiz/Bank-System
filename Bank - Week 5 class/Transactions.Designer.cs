@@ -102,6 +102,7 @@
             this.AllTransactionsbtn.TabIndex = 6;
             this.AllTransactionsbtn.Text = "All Transactions";
             this.AllTransactionsbtn.UseVisualStyleBackColor = true;
+            this.AllTransactionsbtn.Click += new System.EventHandler(this.AllTransactionsbtn_Click);
             // 
             // Transactions
             // 

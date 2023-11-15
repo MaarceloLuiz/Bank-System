@@ -23,16 +23,17 @@ namespace Bank___Week_5_class
 
         private void btnAllAcc_Click(object sender, EventArgs e)
         {
-            LoadData();
+            string usp = "uspGetAll";
+            LoadData(usp);
         }
 
-        void LoadData()
+        void LoadData(string usp)
         {
             da = new SqlDataAdapter();
             dt = new DataTable();
 
             SqlCommand cmd = dao.OpenCon().CreateCommand();
-            cmd.CommandText = "uspGetAll";
+            cmd.CommandText = usp;
             cmd.CommandType = CommandType.StoredProcedure;
 
             da.SelectCommand = cmd;
@@ -44,7 +45,8 @@ namespace Bank___Week_5_class
 
         private void Transactions_Load(object sender, EventArgs e)
         {
-            LoadData();
+            string usp = "uspGetAll";
+            LoadData(usp);
 
             cboGen.DataSource = Enum.GetValues(typeof(Gen));
         }
@@ -91,6 +93,12 @@ namespace Bank___Week_5_class
         private void cboGen_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void AllTransactionsbtn_Click(object sender, EventArgs e)
+        {
+            string usp = "uspAllTransactions";
+            LoadData(usp);
         }
     }
 }
