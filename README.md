@@ -16,6 +16,50 @@ CREATE TABLE [dbo].[NewAccount] (
     
 );
 
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE [dbo].[Transactions] (
+
+    [TransactionsID] INT            IDENTITY (1, 1) NOT NULL,
+    [Firstname]      NVARCHAR (50)  NULL,
+    [Surname]        NVARCHAR (50)  NULL,
+    [DOB]            NVARCHAR (150) NULL,
+    [County]         NVARCHAR (50)  NULL,
+    [Gender]         NVARCHAR (50)  NULL,
+    [Balance]        MONEY          NULL,
+    [AccType]        NVARCHAR (50)  NULL,
+    [Amount]         MONEY          NULL,
+    PRIMARY KEY CLUSTERED ([TransactionsID] ASC)
+    
+);
+
+## Triggers
+
+CREATE TRIGGER [Trig]
+	ON [dbo].[NewAccount]
+	FOR DELETE, INSERT, UPDATE
+	AS
+	BEGIN
+ 
+		DECLARE @fn nvarchar(50)
+		SELECT @fn = Firstname From inserted
+		DECLARE @sn nvarchar(50)
+		SELECT @sn = Surname From inserted
+		DECLARE @dob nvarchar(150)
+		SELECT @dob = DOB From inserted
+		DECLARE @cy nvarchar(50)
+		SELECT @cy = County FROM inserted
+		DECLARE @ge nvarchar(50)
+		SELECT @ge = Gender FROM inserted
+		DECLARE @bal money
+		SELECT @bal = Balance From inserted
+		DECLARE @act nvarchar(50)
+		SELECT @act = AccType From inserted
+
+		INSERT INTO Transactions(Firstname, Surname, DOB, County, Gender, Balance, AccType) VALUES(@fn, @sn, @dob, @cy, @ge, @bal, @act)
+
+	END
+
 ## Stored Procedures
 
 CREATE PROCEDURE [dbo].[uspAddAcc]
@@ -117,5 +161,15 @@ CREATE PROCEDURE [dbo].[uspUpdateBalance]
 AS
 
 	UPDATE NewAccount SET Balance = @nb WHERE AccNum = @acNo
+ 
+RETURN 0
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+CREATE PROCEDURE [dbo].[uspAllTransactions]
+	
+AS
+
+	SELECT * from Transactions
  
 RETURN 0
