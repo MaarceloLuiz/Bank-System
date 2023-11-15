@@ -34,13 +34,14 @@
             this.btnAccAbove = new System.Windows.Forms.Button();
             this.cboGen = new System.Windows.Forms.ComboBox();
             this.btnSelect = new System.Windows.Forms.Button();
+            this.AllTransactionsbtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAcc)).BeginInit();
             this.SuspendLayout();
             // 
             // dgvAcc
             // 
             this.dgvAcc.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvAcc.Location = new System.Drawing.Point(12, 121);
+            this.dgvAcc.Location = new System.Drawing.Point(12, 204);
             this.dgvAcc.Name = "dgvAcc";
             this.dgvAcc.RowHeadersWidth = 51;
             this.dgvAcc.RowTemplate.Height = 24;
@@ -93,11 +94,21 @@
             this.btnSelect.UseVisualStyleBackColor = true;
             this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
             // 
+            // AllTransactionsbtn
+            // 
+            this.AllTransactionsbtn.Location = new System.Drawing.Point(341, 129);
+            this.AllTransactionsbtn.Name = "AllTransactionsbtn";
+            this.AllTransactionsbtn.Size = new System.Drawing.Size(124, 53);
+            this.AllTransactionsbtn.TabIndex = 6;
+            this.AllTransactionsbtn.Text = "All Transactions";
+            this.AllTransactionsbtn.UseVisualStyleBackColor = true;
+            // 
             // Transactions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(803, 450);
+            this.ClientSize = new System.Drawing.Size(803, 533);
+            this.Controls.Add(this.AllTransactionsbtn);
             this.Controls.Add(this.btnSelect);
             this.Controls.Add(this.cboGen);
             this.Controls.Add(this.btnAccAbove);
@@ -121,5 +132,6 @@
         private System.Windows.Forms.Button btnAccAbove;
         private System.Windows.Forms.ComboBox cboGen;
         private System.Windows.Forms.Button btnSelect;
+        private System.Windows.Forms.Button AllTransactionsbtn;
     }
 }
